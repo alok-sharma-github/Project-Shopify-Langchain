@@ -1,0 +1,136 @@
+body{
+    margin: 0;
+    padding:0;
+    height: 100%;
+}
+ 
+.chatbox{
+    height: 80vh;
+    width: 100%;
+}
+ 
+.chatbox-title{
+    background-color: black;
+    height: 80px;
+    border-radius: 1rem 1rem 0 0;
+    padding: 0.5rem 1.5rem;
+}
+ 
+.chatbox-message{
+    height: calc(80vh - 160px);
+    overflow-y: auto;
+}
+ 
+.chatbox-input{
+    height: 80px;
+    border-top: 1px solid rgba(0,0,0,0.2);
+    padding: 0 2rem;
+}
+ 
+ 
+.chatbox-title h3{
+    color: white;
+    margin: 0 !important;
+}
+ 
+.chatbox-title button{
+    background-color: transparent;
+    border: 0;
+    color: white;
+    font-size: 1.2rem;
+}
+ 
+.chatbox-input .form-control{
+    font-size: 1rem;
+    padding: 1rem 1.5rem;
+    border-radius: 2rem;
+    width: 100%;
+}
+ 
+.chatbox-input .form-control:focus{
+    box-shadow: none;
+    border-color: black !important;
+}
+ 
+.chatbox-input button{
+    position: absolute;
+    background-color: black;
+    color: white;
+    height: 40px;
+    width: 40px;
+    right: calc(30px + 1rem);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-color: black;
+}
+ 
+.chatbox-input button:hover, .chatbox-input button:active{
+    border-color: black !important;
+    background-color: black !important;
+    color: white !important;
+}
+ 
+ 
+/* Message */
+ 
+.message-right.sender{
+    max-width: 75%;
+    margin-left: auto;
+    display: flex;
+    justify-content: end;
+}
+ 
+.message-right .message-text{
+    display: inline-block;
+    background-color: black;
+    color: white;
+    width: auto;
+    padding: 1rem;
+    border-radius: 0.75rem 0 0.75rem 0.75rem;
+}
+ 
+.message-text p, ul, ol{
+    margin: 0 !important;
+}
+ 
+ 
+.message-left.receiver{
+    max-width: 75%;
+    margin-right: auto;
+    display: flex;
+    justify-content: start;
+}
+ 
+.message-left .message-text{
+    display: inline-block;
+    background-color: #E6E6E6;
+    color: #444444;
+    width: auto;
+    padding: 1rem;
+    border-radius: 0 0.75rem 0.75rem 0.75rem;
+}
+ 
+.message-avatar img{
+    margin-left: 1rem;
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid rgba(0,0,0,0.2);
+}
+
+/* card image */
+.card-img, .card-img-bottom, .card-img-top {
+    width: 100px;
+    margin-top: 1rem;
+}
+
+.btn-danger {
+    margin-left: 1rem;
+}
+.small-gif {
+    width: 50px;
+    height: 50px;
+}

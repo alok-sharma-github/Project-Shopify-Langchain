@@ -1,0 +1,31 @@
+# VENV
+lang/
+
+# indexes
+faiss_index_bhagvadGita/
+faiss_index_books/
+faiss_index_kamasutra/
+faiss_index{file_path}/
+Indian Ancient Texts/
+law data/
+storeaibot/
+BACKEND/
+
+# env
+.env
+*.pem
+
+# compress
+*.zip
+
+# Notebooks
+*.ipynb
+celery-tasks.py
+krishna.py
+app.py
+seduce.py
+shopify-backend.py
+
+# config
+config.json
+*.json

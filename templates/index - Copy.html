@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+ 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="static/style.css">
+</head>
+ 
+<body>
+ 
+    <div class="container">
+        <div class="row my-5 justify-content-center py-5">
+            <div class="col-md-8">
+                <div class="card shadow-lg rounded-4 border-0 chatbox">
+                    <div class="chatbox-title d-flex align-items-center justify-content-between">
+                        <h3>ShopAI</h3>
+                        <button><i class="bi bi-x-lg"></i></button>
+                    </div>
+                    <div class="chatbox-message p-3">
+                        <div class="message-container my-2">
+                            <div class="message-right sender">
+                                <div class="message-text">
+                                    <p>Hello! How can I assist you today?</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="message-container my-2">
+                            <div class="message-right sender">
+                                <div class="message-text">
+                                    <p>Hello! How can I assist you today?</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="message-container my-2">
+                            <div class="message-avatar">
+                                <img
+                                    src="https://img.freepik.com/free-vector/graident-ai-robot-vectorart_78370-4114.jpg?size=338&ext=jpg&ga=GA1.1.2082370165.1716422400&semt=ais_user" />
+                            </div>
+                            <div class="message-left receiver p-3">
+ 
+                                <div class="message-text">
+                                    <!-- left -->
+                                </div>
+                            </div>
+                            <div class="message-left receiver p-3">
+                                <div id="botThinking" class="message-left receiver p-3" style="display: none;">
+                                    <img src="https://media2.giphy.com/media/20NLMBm0BkUOwNljwv/giphy.gif" alt="Bot is thinking...">
+                                </div>
+                                <div class="message-text">
+                                    <!-- left -->
+                                </div>
+                            </div>
+                            <div class="message-left receiver p-3">
+                                <div class="message-text">
+                                    <!-- left -->
+                                </div>
+                            </div>
+                            <div class="message-left receiver p-3">
+                                <div class="message-text">
+                                    <!-- left -->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="message-container my-2">
+                            <div class="message-right sender">
+                                <div class="message-text">
+                                    <p>Here is suggested list items:</p>
+                                    <ul>
+                                        <li>List item 1</li>
+                                        <li>List item 2</li>
+                                        <li>List item 3</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="message-container my-2">
+                            <div class="message-left receiver p-3">
+                                <div class="message-text">
+                                    <!-- left -->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="message-container my-2">
+                            <div class="message-left receiver p-3">
+                                <div class="message-text">
+                                    <ul>
+                                        <li>List item 1</li>
+                                        <li>List item 2</li>
+                                        <li>List item 3</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="message-container my-2">
+                            <div class="message-right sender">
+                                <div class="message-text">
+                                    <!-- right -->
+ 
+                                </div>
+                            </div>
+                        </div>
+                        <div class="message-container my-2">
+                            <div class="message-left receiver p-3">
+                                <div class="message-text">
+                                    <div class="card border-0">
+                                        <img src="https://m.media-amazon.com/images/I/614hH1Cot3L._AC_UF1000,1000_QL80_.jpg" class="card-img-top d-block w-100" />
+                                        <div class="card-body">
+                                            <h5 class="card-title">Card title</h5>
+                                            <!-- card left -->
+                                            <button class="btn btn-dark px-5 rounded-4 mt-3">Buy Now</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chatbox-input d-flex align-items-center justify-content-center">
+                        <input type="text" class="form-control" id="messageInput" placeholder="Type your message...."
+                            aria-label="Recipient's username" aria-describedby="button-addon2">
+                        <button class="btn" type="button" id="sendButton"><i class="bi bi-send"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+ 
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+
+    <!-- Handling form submission -->
+    <script>
+        $(document).ready(function() {
+            function sendMessage() {
+                var message = $('#messageInput').val();
+                console.log('Sending message:', message);  // Debugging: log the message to be sent
+
+                // Append the message to the chatbox immediately
+                $('.chatbox-message').append(
+                    `<div class="message-container my-2">
+                        <div class="message-right sender">
+                            <div class="message-text">
+                                <p>${message}</p>
+                            </div>
+                        </div>
+                    </div>`
+                );
+                $('#messageInput').val('');  // Clear input box
+                $('.chatbox-message').scrollTop($('.chatbox-message')[0].scrollHeight);  // Scroll to bottom
+
+                $.ajax({
+                    url: '/send_message',
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ message: message }),
+                    success: function(response) {
+                        console.log('Response:', response);  // Debugging: log the response
+                        $('.chatbox-message').append(    
+                            `<div class="message-container my-2">
+                                <div class="message-avatar">
+                                    <img src="https://img.freepik.com/free-vector/graident-ai-robot-vectorart_78370-4114.jpg?size=338&ext=jpg&ga=GA1.1.2082370165.1716422400&semt=ais_user" />
+                                </div>
+                                <div class="message-left receiver p-3">
+                                    <div class="message-text">                
+                                        <div class="card border-0">
+                                            <div class="card-body">
+                                                ${response.reply}                                                
+                                            </div>                                            
+                                        </div>
+                                        <button class="btn btn-danger px-5 rounded-4 mt-3" onclick="resetChatEngine()">Reset Chat</button>                                                                                
+                                    </div>
+                                </div>
+                            </div>
+                            `
+                        );
+                        $('.chatbox-message').scrollTop($('.chatbox-message')[0].scrollHeight);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error:', status, error);  // Debugging: log any errors
+                        alert('Error sending message: ' + xhr.responseText);  // Provide user feedback
+                    }
+                });
+            }
+        
+            $('#sendButton').click(function() {
+                sendMessage();
+            });
+        
+            $('#messageInput').keypress(function(event) {
+                if (event.which == 13) {
+                    event.preventDefault();
+                    sendMessage();
+                }
+            });
+        });
+        
+        function resetChatEngine() {
+            fetch('/reset_chat_engine', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(response => response.json())
+              .then(data => alert(data.reply));
+        }
+        
+    </script>    
+    
+</body> 
+</html>
+
