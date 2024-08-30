@@ -27,7 +27,7 @@ import logging
 from langchain_experimental.llms.ollama_functions import OllamaFunctions
 from openai import OpenAI
 # openai = OpenAI(
-#     api_key="~6eT/ycv50f_Mh5nFQ4QkbK3z6Xds4wz", # Refer to Create a secret key section
+#     api_key="~6........", # Refer to Create a secret key section
 #     base_url="https://cloud.olakrutrim.com/v1",
 # )
 
