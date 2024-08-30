@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, session
+from flask import Flask, request, jsonify, session, render_template
 from flask_cors import CORS, cross_origin
 from flask_cors import CORS
 import uuid
@@ -24,6 +24,34 @@ from langchain_community.document_loaders.mongodb import MongodbLoader
 from dotenv import load_dotenv
 import nest_asyncio
 import logging
+from langchain_experimental.llms.ollama_functions import OllamaFunctions
+from openai import OpenAI
+# openai = OpenAI(
+#     api_key="~6eT/ycv50f_Mh5nFQ4QkbK3z6Xds4wz", # Refer to Create a secret key section
+#     base_url="https://cloud.olakrutrim.com/v1",
+# )
+
+# def llm(message, session_id):
+#     chat_completion = openai.chat.completions.create(
+#         model="Meta-Llama-3-8B-Instruct",
+#         messages=[
+#             {"role": "system", "content": "You are a helpful assistant."},
+#             {"role": "user", "content": message}
+#         ],
+#         frequency_penalty=0,
+#         logit_bias={2435: -100, 640: -100},
+#         logprobs=True,
+#         top_logprobs=2,
+#         max_tokens=256,
+#         n=1,
+#         presence_penalty=0,
+#         response_format={"type": "text"},
+#         stop=None,
+#         stream=False,
+#         temperature=0,
+#         top_p=1
+#     )
+#     return chat_completion['choices'][0]['message']['content']
 
 # Flask App Initialization
 app = Flask(__name__)
@@ -44,15 +72,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Initialize GoogleGenerativeAI and Embeddings
-llm = ChatGoogleGenerativeAI(
-    model="gemini-1.5-pro-latest",
-    safety_settings={
-        HarmCategory.HARM_CATEGORY_HARASSMENT: HarmBlockThreshold.BLOCK_NONE,
-        HarmCategory.HARM_CATEGORY_HATE_SPEECH: HarmBlockThreshold.BLOCK_NONE,
-        HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT: HarmBlockThreshold.BLOCK_NONE,
-        HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT: HarmBlockThreshold.BLOCK_NONE,
-    },
-)
+llm = OllamaFunctions(model="llama3.1", format="json")
 embed_model = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
 uri = os.getenv('MONGODB_URI')
 
@@ -105,12 +125,30 @@ history_aware_retriever = create_history_aware_retriever(
 
 prompt = (
     '''You are a conversational AI specializing in product recommendations.
-    Whenever asked about recommendations include the product URL and image URL, along with any other necessary details, and enhance the details accordingly with your knowledge but within the context.
-    Use only the provided context, no external knowledge allowed.
-    be a conversational mode do proper conversation
-    I want to display this so while displaying imagewith size fix 200 x200 to convert it and answer the question in markdown format.
-    always display image markdown as img src tag having `width: 75px; padding: 10px 5px; border-radius: 0%;`
-    and display product url as product url and on clicking that product should open
+    Whenever asked about recommendations include the product URL and image URL, 
+    along with any other necessary details, and enhance the details accordingly from the context.
+    Also always provide multiple options.
+    Use only the provided context, **Do not use your own knowledge.**.
+    Respond in HTML.
+
+    ---------
+
+    Example:
+    <div style="padding: 10px; border: 1px solid #ddd; border-radius: 5px; max-width: 400px;">
+        <h3>{{ data.title }}</h3>
+        <p><strong>Description:</strong> {{ data.description }}</p>
+        <p><strong>Vendor:</strong> {{ data.vendor }}</p>
+        <p><strong>Product Type:</strong> {{ data.product_type }}</p>
+        <p><strong>Price:</strong> ₹{{ data.price }}</p>
+        <a href="{{ data.product_url }}">
+            <img src="{{ data.image_url }}" alt="{{ data.title }}" 
+                 style="width: 75px; padding: 10px 5px; border-radius: 0%;"/>
+        </a>
+        <p><a href="{{ data.product_url }}" style="text-decoration:none;color:#0d6efd;">View Product</a></p>
+    </div>
+
+    ------------
+    
     <context>
     {context}
     </context>
@@ -142,25 +180,39 @@ conversational_rag_chain = RunnableWithMessageHistory(
     output_messages_key="answer",
 )
 
-@app.route('/query', methods=['POST'])
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/send_message', methods=['POST'])
 @cross_origin(origin='localhost', headers=['Content-Type', 'Authorization'])
-def handle_query():
-    data = request.json
-    query = data.get('query')
-    session_id = data.get('session_id', 'default_session')  # You can customize the session_id handling as needed
-
-    if not query:
-        return jsonify({"error": "Query parameter is required"}), 400
-
-    try:
-        response = conversational_rag_chain.invoke({"input": query}, config={
-            "configurable": {"session_id": session_id}
-        })
-        answer = response['answer']
-        return jsonify({"answer": answer})
-    except Exception as e:
-        logger.error(f"Error processing query: {e}")
-        return jsonify({"error": "Internal Server Error"}), 500
+def send_message():
+    if request.is_json:
+        data = request.get_json()
+        message = data.get('message')
+        if not message:
+            return jsonify({"error": "Message is required"}), 400
+ 
+        # Retrieve or set a session ID
+        if 'session_id' not in session:
+            session['session_id'] = str(uuid.uuid4())
+        session_id = session['session_id']
+ 
+        print("Session ID: ", session_id)
+ 
+        md_response_2 = conversational_rag_chain.invoke(
+            {"input": message},
+            config={
+                "configurable": {"session_id": session_id}
+            },
+        )
+ 
+        print("Output:\n", md_response_2)
+        response_2 = {"reply": md_response_2['answer']}
+        return jsonify(response_2)
+    else:
+        return jsonify({"error": "Invalid input"}), 400
 
 if __name__ == "__main__":
     app.run(debug=False)  # Change to False for production
